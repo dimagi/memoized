@@ -20,7 +20,7 @@ class Memoized(object):
     """Decorator. Caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned
     (not reevaluated).
-    >>> from dimagi.utils.decorators.memoized import memoized
+    >>> from memoized import memoized
     >>> @memoized
     ... def f(n=0):
     ...     return n**2

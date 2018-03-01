@@ -18,6 +18,10 @@ def memoized(fn):
     return _inner
 
 
+def memoized_property(fn):
+    return property(memoized(fn))
+
+
 class Memoized(object):
     """Decorator. Caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned
@@ -43,8 +47,7 @@ class Memoized(object):
     ...     def __init__(self, first_name, last_name):
     ...         self.first_name = first_name
     ...         self.last_name = last_name
-    ...     @property
-    ...     @memoized
+    ...     @memoized_property
     ...     def full_name(self):
     ...         print("Computing full name")
     ...         return "%s %s" % (self.first_name, self.last_name)

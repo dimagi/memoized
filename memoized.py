@@ -1,7 +1,9 @@
 # See http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 from __future__ import absolute_import
+from __future__ import print_function
 import functools
 from inspect import getargspec, getcallargs, isfunction
+
 
 def memoized(fn):
     m = Memoized(fn)
@@ -44,17 +46,17 @@ class Memoized(object):
     ...     @property
     ...     @memoized
     ...     def full_name(self):
-    ...         print "Computing full name"
+    ...         print("Computing full name")
     ...         return "%s %s" % (self.first_name, self.last_name)
     ...     @memoized
     ...     def get_full_name(self):
-    ...         print "Computing full name"
+    ...         print("Computing full name")
     ...         return "%s %s" % (self.first_name, self.last_name)
     ...     def __repr__(self):
     ...         return "%s(%r, %r)" % (self.__class__.__name__, self.first_name, self.last_name)
     ...     @memoized
     ...     def complicated_method(self, a, b=10, *args, **kwargs):
-    ...         print "Calling complicated method"
+    ...         print("Calling complicated method")
     ...         return a, b, args, kwargs
     >>> p = Person("Danny", "Roberts")
     >>> p.get_full_name()

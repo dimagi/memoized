@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='dimagi-memoized',
-    version='1.1.0',
+    version='1.1.1',
     description="A simple memoization decorator that's also memory efficient on instance methods",
     long_description="",
     url="https://github.com/dimagi/memoized",

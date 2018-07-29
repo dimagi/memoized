@@ -1,6 +1,7 @@
 # See http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import unicode_literals
 import functools
 from inspect import getargspec, getcallargs, isfunction
 

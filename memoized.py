@@ -65,18 +65,18 @@ class Memoized(object):
     >>> p = Person("Danny", "Roberts")
     >>> p.get_full_name()
     Computing full name
-    'Danny Roberts'
+    u'Danny Roberts'
     >>> p.get_full_name()
-    'Danny Roberts'
+    u'Danny Roberts'
     >>> p.full_name
     Computing full name
-    'Danny Roberts'
+    u'Danny Roberts'
     >>> Person("Danny", "Roberts")._full_name_cache
-    {(): 'Danny Roberts'}
+    {(): u'Danny Roberts'}
     >>> p.full_name
-    'Danny Roberts'
+    u'Danny Roberts'
     >>> Person.get_full_name.get_cache(p)
-    {(): 'Danny Roberts'}
+    {(): u'Danny Roberts'}
     >>> p.complicated_method(5)
     Calling complicated method
     (5, 10, (), {})
@@ -84,11 +84,11 @@ class Memoized(object):
     (5, 10, (), {})
     >>> p.complicated_method(1, 2, 3, 4, 5, foo='bar')
     Calling complicated method
-    (1, 2, (3, 4, 5), {'foo': 'bar'})
+    (1, 2, (3, 4, 5), {'foo': u'bar'})
     >>> q = Person("Joe", "Schmoe")
     >>> q.get_full_name()
     Computing full name
-    'Joe Schmoe'
+    u'Joe Schmoe'
     """
     def __init__(self, func):
 

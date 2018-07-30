@@ -1,7 +1,6 @@
 # See http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
 from __future__ import absolute_import
 from __future__ import print_function
-from __future__ import unicode_literals
 import functools
 from inspect import getargspec, getcallargs, isfunction
 
@@ -99,7 +98,7 @@ class Memoized(object):
                 return func(*args, **kwargs)
             self.func = wrapped
         self.argspec = getargspec(self.func)
-        if self.argspec.args and self.argspec.args[0] == 'self':
+        if self.argspec.args and self.argspec.args[0] == u'self':
             self.is_method = True
         else:
             self.is_method = False
@@ -107,7 +106,7 @@ class Memoized(object):
 
     def get_cache(self, obj=None):
         if self.is_method:
-            cache_attr = '_%s_cache' % self.func.__name__
+            cache_attr = u'_%s_cache' % self.func.__name__
             try:
                 cache = getattr(obj, cache_attr)
             except (KeyError, AttributeError):

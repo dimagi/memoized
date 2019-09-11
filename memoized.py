@@ -2,7 +2,11 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import functools
-from inspect import getargspec, getcallargs, isfunction
+from inspect import getcallargs, isfunction
+try:
+    from inspect import getfullargspec
+except ImportError:
+    from inspect import getargspec as getfullargspec  # Deprecated since 3.0
 
 
 def memoized(fn):
@@ -97,7 +101,7 @@ class Memoized(object):
             def wrapped(*args, **kwargs):
                 return func(*args, **kwargs)
             self.func = wrapped
-        self.argspec = getargspec(self.func)
+        self.argspec = getfullargspec(self.func)
         if self.argspec.args and self.argspec.args[0] == u'self':
             self.is_method = True
         else:
@@ -143,11 +147,14 @@ class Memoized(object):
         Take a function and the arguments you'd call it with
         and return a tuple
         """
-        arg_names, args_name, kwargs_name, ___ = self.argspec
+        try:
+            kwargs_name = self.argspec.varkw
+        except AttributeError:
+            kwargs_name = self.argspec.keywords  # deprecated inspect.ArgSpec
         values = getcallargs(self.func, *args, **kwargs)
-        in_order = [values[arg_name] for arg_name in arg_names]
-        if args_name:
-            in_order.append(values[args_name])
+        in_order = [values[arg_name] for arg_name in self.argspec.args]
+        if self.argspec.varargs:
+            in_order.append(values[self.argspec.varargs])
         if kwargs_name:
             in_order.append(tuple(sorted(values[kwargs_name].items())))
         return tuple(in_order)

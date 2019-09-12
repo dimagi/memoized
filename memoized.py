@@ -2,7 +2,12 @@
 from __future__ import absolute_import
 from __future__ import print_function
 import functools
-from inspect import getargspec, getcallargs, isfunction
+from inspect import getcallargs, isfunction
+try:
+    from inspect import getfullargspec
+except ImportError:
+    # Fall back to getargspec, deprecated since Python 3.0
+    from inspect import getargspec as getfullargspec
 
 
 def memoized(fn):
@@ -40,8 +45,10 @@ class Memoized(object):
     {(0,): 0}
     >>> f(2)
     4
+    >>> f(n=4)
+    16
     >>> sorted(f.get_cache().items())
-    [((0,), 0), ((2,), 4)]
+    [((0,), 0), ((2,), 4), ((4,), 16)]
     >>> @memoized
     ... class Person(object):
     ...     def __init__(self, first_name, last_name):
@@ -97,7 +104,7 @@ class Memoized(object):
             def wrapped(*args, **kwargs):
                 return func(*args, **kwargs)
             self.func = wrapped
-        self.argspec = getargspec(self.func)
+        self.argspec = getfullargspec(self.func)
         if self.argspec.args and self.argspec.args[0] == u'self':
             self.is_method = True
         else:
@@ -143,11 +150,11 @@ class Memoized(object):
         Take a function and the arguments you'd call it with
         and return a tuple
         """
-        arg_names, args_name, kwargs_name, ___ = self.argspec
+        kwargs_name = self.argspec[2]  # FullArgSpec.varkw or ArgSpec.keywords
         values = getcallargs(self.func, *args, **kwargs)
-        in_order = [values[arg_name] for arg_name in arg_names]
-        if args_name:
-            in_order.append(values[args_name])
+        in_order = [values[arg_name] for arg_name in self.argspec.args]
+        if self.argspec.varargs:
+            in_order.append(values[self.argspec.varargs])
         if kwargs_name:
             in_order.append(tuple(sorted(values[kwargs_name].items())))
         return tuple(in_order)

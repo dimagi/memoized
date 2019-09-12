@@ -45,8 +45,10 @@ class Memoized(object):
     {(0,): 0}
     >>> f(2)
     4
+    >>> f(n=4)
+    16
     >>> sorted(f.get_cache().items())
-    [((0,), 0), ((2,), 4)]
+    [((0,), 0), ((2,), 4), ((4,), 16)]
     >>> @memoized
     ... class Person(object):
     ...     def __init__(self, first_name, last_name):

@@ -6,7 +6,8 @@ from inspect import getcallargs, isfunction
 try:
     from inspect import getfullargspec
 except ImportError:
-    from inspect import getargspec as getfullargspec  # Deprecated since 3.0
+    # Fall back to getargspec, deprecated since Python 3.0
+    from inspect import getargspec as getfullargspec
 
 
 def memoized(fn):
@@ -147,10 +148,7 @@ class Memoized(object):
         Take a function and the arguments you'd call it with
         and return a tuple
         """
-        try:
-            kwargs_name = self.argspec.varkw
-        except AttributeError:
-            kwargs_name = self.argspec.keywords  # deprecated inspect.ArgSpec
+        kwargs_name = self.argspec[2]  # FullArgSpec.varkw or ArgSpec.keywords
         values = getcallargs(self.func, *args, **kwargs)
         in_order = [values[arg_name] for arg_name in self.argspec.args]
         if self.argspec.varargs:

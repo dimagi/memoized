@@ -16,6 +16,7 @@ setup(
     version='1.1.2',
     description="A simple memoization decorator that's also memory efficient on instance methods",
     long_description=get_long_desciption(),
+    long_description_content_type="text/markdown",
     url="https://github.com/dimagi/memoized",
     author='Dimagi',
     author_email='dev@dimagi.com',

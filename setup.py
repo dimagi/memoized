@@ -13,7 +13,7 @@ def get_long_desciption():
 
 setup(
     name='dimagi-memoized',
-    version='1.1.1',
+    version='1.1.2',
     description="A simple memoization decorator that's also memory efficient on instance methods",
     long_description=get_long_desciption(),
     url="https://github.com/dimagi/memoized",

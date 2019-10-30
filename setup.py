@@ -24,5 +24,6 @@ setup(
     install_requires=(),
     test_requires=(
         'nose',
-    )
+    ),
+    options={"bdist_wheel": {"universal": "1"}},
 )

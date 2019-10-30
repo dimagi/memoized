@@ -22,8 +22,10 @@ setup(
     license='BSD-3',
     py_modules=['memoized'],
     install_requires=(),
-    test_requires=(
-        'nose',
-    ),
+    extras_require={
+        'test': [
+            'nose',
+        ],
+    },
     options={"bdist_wheel": {"universal": "1"}},
 )

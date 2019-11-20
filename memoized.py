@@ -12,12 +12,9 @@ except ImportError:
 
 def memoized(fn):
     m = Memoized(fn)
-    try:
-        @functools.wraps(fn)
-        def _inner(*args, **kwargs):
-            return m(*args, **kwargs)
-    except TypeError:
-        _inner = m
+    @functools.wraps(fn)
+    def _inner(*args, **kwargs):
+        return m(*args, **kwargs)
     _inner.get_cache = m.get_cache
     _inner.reset_cache = m.reset_cache
     return _inner

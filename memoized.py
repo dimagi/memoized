@@ -137,9 +137,10 @@ class Memoized(object):
         try:
             return cache[key]
         except KeyError:
-            value = self.func( *args, **kwargs)
-            cache[key] = value
-            return value
+            pass
+        value = self.func( *args, **kwargs)
+        cache[key] = value
+        return value
 
     def __repr__(self):
         """Return the function's docstring."""

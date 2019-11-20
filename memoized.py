@@ -11,13 +11,14 @@ except ImportError:
 
 
 def memoized(fn):
-    m = Memoized(fn)
-    @functools.wraps(fn)
-    def _inner(*args, **kwargs):
+    def _memoized(*args, **kwargs):
         return m(*args, **kwargs)
-    _inner.get_cache = m.get_cache
-    _inner.reset_cache = m.reset_cache
-    return _inner
+
+    m = Memoized(fn)
+    _memoized = functools.wraps(fn)(_memoized)
+    _memoized.get_cache = m.get_cache
+    _memoized.reset_cache = m.reset_cache
+    return _memoized
 
 
 def memoized_property(fn):

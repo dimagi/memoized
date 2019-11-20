@@ -26,6 +26,7 @@ setup(
     extras_require={
         'test': [
             'nose',
+            'testil',
         ],
     },
     options={"bdist_wheel": {"universal": "1"}},

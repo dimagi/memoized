@@ -144,6 +144,8 @@ class Memoized(object):
 
     def get_key(self, args, kwargs):
         """Get cache key from call arguments"""
+        if not kwargs and not self.argspec.defaults:
+            return args[1:] if self.is_method else args
         kwargs_name = self.argspec[2]  # FullArgSpec.varkw or ArgSpec.keywords
         values = getcallargs(self.func, *args, **kwargs)
         in_order = [values[arg_name] for arg_name in self.arg_names]

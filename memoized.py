@@ -111,8 +111,10 @@ class Memoized(object):
         self.argspec = getfullargspec(self.func)
         if self.argspec.args and self.argspec.args[0] == u'self':
             self.is_method = True
+            self.arg_names = self.argspec.args[1:]
         else:
             self.is_method = False
+            self.arg_names = self.argspec.args
             self._cache = {}
 
     def get_cache(self, obj=None):
@@ -131,27 +133,20 @@ class Memoized(object):
         self.get_cache(obj).clear()
 
     def get_cache_and_key(self, args, kwargs):
-        if self.is_method:
-            key = self.get_args_tuple(*args, **kwargs)[1:]
-            obj = args[0]
-        else:
-            key = self.get_args_tuple(*args, **kwargs)
-            obj = None
+        obj = args[0] if self.is_method else None
         cache = self.get_cache(obj)
+        key = self.get_key(args, kwargs)
         return cache, key
 
     def __repr__(self):
         """Return the function's docstring."""
         return self.func.__doc__
 
-    def get_args_tuple(self, *args, **kwargs):
-        """
-        Take a function and the arguments you'd call it with
-        and return a tuple
-        """
+    def get_key(self, args, kwargs):
+        """Get cache key from call arguments"""
         kwargs_name = self.argspec[2]  # FullArgSpec.varkw or ArgSpec.keywords
         values = getcallargs(self.func, *args, **kwargs)
-        in_order = [values[arg_name] for arg_name in self.argspec.args]
+        in_order = [values[arg_name] for arg_name in self.arg_names]
         if self.argspec.varargs:
             in_order.append(values[self.argspec.varargs])
         if kwargs_name:

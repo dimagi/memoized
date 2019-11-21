@@ -48,14 +48,14 @@ def test_memoized_function_get_cache():
 
     eq(mem_func(0), 1)
     cache = mem_func.get_cache()
-    eq(cache[(0,)], 1)
+    eq(cache, {(0,): 1})
 
 
 def test_memoized_method_get_cache():
     sub = Subject()
     eq(sub.mem_func(0), 1)
     cache = sub.mem_func.get_cache(sub)
-    eq(cache[(0,)], 1)
+    eq(cache, {(0,): 1})
 
 
 def test_memoized_function_name():

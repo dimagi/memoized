@@ -12,10 +12,12 @@ except ImportError:
 
 def memoized(fn):
     def _memoized(*args, **kwargs):
-        memoize, value = m.get_cached_value(args, kwargs)
-        if memoize:
-            value = fn(*args, **kwargs)
-            memoize(value)
+        cache, key = m.get_cache_and_key(args, kwargs)
+        try:
+            return cache[key]
+        except KeyError:
+            pass
+        cache[key] = value = fn(*args, **kwargs)
         return value
 
     m = Memoized(fn)
@@ -128,7 +130,7 @@ class Memoized(object):
     def reset_cache(self, obj=None):
         self.get_cache(obj).clear()
 
-    def get_cached_value(self, args, kwargs):
+    def get_cache_and_key(self, args, kwargs):
         if self.is_method:
             key = self.get_args_tuple(*args, **kwargs)[1:]
             obj = args[0]
@@ -136,12 +138,7 @@ class Memoized(object):
             key = self.get_args_tuple(*args, **kwargs)
             obj = None
         cache = self.get_cache(obj)
-        try:
-            return None, cache[key]
-        except KeyError:
-            def memoize(value):
-                cache[key] = value
-            return memoize, None
+        return cache, key
 
     def __repr__(self):
         """Return the function's docstring."""
